@@ -1,0 +1,576 @@
+<!-- BIONIC WORLD - ANGEBOTSANFRAGE FORMULAR -->
+<!-- Dieses HTML in ein Custom HTML Modul oder Beitrag einfügen -->
+
+<style>
+.angebot-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.angebot-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.angebot-title {
+    font-size: 2.5rem;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+}
+
+.angebot-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+.angebot-form {
+    background: white;
+    padding: 50px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.form-section {
+    margin-bottom: 40px;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.form-label.required::after {
+    content: " *";
+    color: #e74c3c;
+}
+
+.form-input,
+.form-textarea {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+}
+
+.form-textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Angebote Grid - SCHMALER mit GLEICHER HÖHE */
+.angebote-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+    grid-auto-rows: 1fr; /* Alle Reihen gleich hoch */
+}
+
+.angebot-checkbox-wrapper {
+    position: relative;
+    display: flex; /* Wichtig für gleiche Höhe */
+}
+
+.angebot-checkbox-input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.angebot-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    background: #e8eaed; /* DUNKLER - war #f8f9fa */
+    border: 2px solid #d0d3d7; /* DUNKLER - war #e0e0e0 */
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    min-height: 100px; /* GLEICHE HÖHE für alle Boxen */
+    width: 100%;
+}
+
+.angebot-checkbox-input:checked + .angebot-checkbox-label {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(0, 153, 204, 0.15)); /* STÄRKER */
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3); /* STÄRKER */
+}
+
+.angebot-checkbox-label:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+/* Häkchen-Anzeige - VIEL BESSERER KONTRAST */
+.angebot-checkbox-label::after {
+    content: "✓";
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 32px; /* GRÖßER - war 24px */
+    height: 32px; /* GRÖßER - war 24px */
+    background: #28a745; /* GRÜN statt Türkis - viel besserer Kontrast! */
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 20px; /* GRÖßER - war 16px */
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.4); /* SCHATTEN für mehr Kontrast */
+}
+
+.angebot-checkbox-input:checked + .angebot-checkbox-label::after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.angebot-icon {
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.angebot-content {
+    flex: 1;
+}
+
+.angebot-name {
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 5px;
+    font-size: 1rem;
+}
+
+.angebot-desc {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    line-height: 1.4;
+}
+
+/* Datenschutz Checkbox */
+.datenschutz-wrapper {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.datenschutz-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.datenschutz-checkbox input[type="checkbox"] {
+    margin-top: 4px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.datenschutz-text {
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.datenschutz-text a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.datenschutz-text a:hover {
+    text-decoration: underline;
+}
+
+/* Submit Button - GRÜN */
+.form-submit {
+    background: #28a745; /* GRÜN statt Gradient */
+    color: white;
+    padding: 18px 50px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3); /* Grüner Schatten */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.form-submit:hover {
+    background: #218838; /* Dunkleres Grün beim Hover */
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+}
+
+.form-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Success/Error Messages */
+.form-message {
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    display: none;
+}
+
+.form-success {
+    background: #d4edda;
+    color: #155724;
+    border: 2px solid #c3e6cb;
+}
+
+.form-error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 2px solid #f5c6cb;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .angebot-form {
+        padding: 30px 20px;
+    }
+    
+    .angebote-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .angebot-title {
+        font-size: 2rem;
+    }
+}
+
+/* Pflichtfeld-Hinweis */
+.required-note {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-bottom: 30px;
+    font-style: italic;
+}
+</style>
+
+<div class="angebot-wrapper">
+    <div class="angebot-header">
+        <h1 class="angebot-title">Angebotsanfrage</h1>
+        <p class="angebot-subtitle">
+            Wählen Sie die gewünschten Leistungen aus und teilen Sie uns Ihre Anforderungen mit. 
+            Wir erstellen Ihnen ein individuelles Angebot.
+        </p>
+    </div>
+    
+    <div class="form-message form-success" id="formSuccess">
+        <strong>✓ Vielen Dank!</strong><br>
+        Ihre Angebotsanfrage wurde erfolgreich versendet. Wir melden uns in Kürze bei Ihnen.
+    </div>
+    
+    <div class="form-message form-error" id="formError">
+        <strong>✗ Fehler!</strong><br>
+        <span id="errorMessage">Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.</span>
+    </div>
+    
+    <form class="angebot-form" id="angebotsForm" method="post" action="/bionic_world_net/angebot-verarbeiten.php">
+        
+        <!-- Persönliche Daten -->
+        <div class="form-section">
+            <h2 class="section-title">1. Ihre Daten</h2>
+            <p class="required-note">* Pflichtfelder</p>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label required" for="vorname">Vorname</label>
+                    <input type="text" id="vorname" name="vorname" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label required" for="nachname">Nachname</label>
+                    <input type="text" id="nachname" name="nachname" class="form-input" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label required" for="email">E-Mail-Adresse</label>
+                    <input type="email" id="email" name="email" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="telefon">Telefon</label>
+                    <input type="tel" id="telefon" name="telefon" class="form-input" placeholder="+49 123 456789">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label required" for="firma">Firma / Organisation</label>
+                    <input type="text" id="firma" name="firma" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="position">Position</label>
+                    <input type="text" id="position" name="position" class="form-input" placeholder="z.B. Geschäftsführer">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Angebotsauswahl -->
+        <div class="form-section">
+            <h2 class="section-title">2. Gewünschte Leistungen</h2>
+            <p class="required-note">Wählen Sie mindestens ein Angebot aus *</p>
+            
+            <div class="angebote-grid">
+                <!-- Angebot 1 -->
+                <div class="angebot-checkbox-wrapper">
+                    <input type="checkbox" id="angebot1" name="angebote[]" value="KI in Prozesssteuerungen" class="angebot-checkbox-input">
+                    <label for="angebot1" class="angebot-checkbox-label">
+                        <div class="angebot-icon">🔧</div>
+                        <div class="angebot-content">
+                            <div class="angebot-name">KI in Prozesssteuerungen</div>
+                            <div class="angebot-desc">Intelligente Steuerungssysteme</div>
+                        </div>
+                    </label>
+                </div>
+                
+                <!-- Angebot 2 -->
+                <div class="angebot-checkbox-wrapper">
+                    <input type="checkbox" id="angebot2" name="angebote[]" value="KI Integration im Betrieb" class="angebot-checkbox-input">
+                    <label for="angebot2" class="angebot-checkbox-label">
+                        <div class="angebot-icon">🏭</div>
+                        <div class="angebot-content">
+                            <div class="angebot-name">KI Integration im Betrieb</div>
+                            <div class="angebot-desc">Nahtlose KI-Einbindung</div>
+                        </div>
+                    </label>
+                </div>
+                
+                <!-- Angebot 3 -->
+                <div class="angebot-checkbox-wrapper">
+                    <input type="checkbox" id="angebot3" name="angebote[]" value="Datenauswertung mit KI" class="angebot-checkbox-input">
+                    <label for="angebot3" class="angebot-checkbox-label">
+                        <div class="angebot-icon">📊</div>
+                        <div class="angebot-content">
+                            <div class="angebot-name">Datenauswertung mit KI</div>
+                            <div class="angebot-desc">KI-gestützte Analysen</div>
+                        </div>
+                    </label>
+                </div>
+                
+                <!-- Angebot 4 -->
+                <div class="angebot-checkbox-wrapper">
+                    <input type="checkbox" id="angebot4" name="angebote[]" value="MCP Server, Agenten & Skills" class="angebot-checkbox-input">
+                    <label for="angebot4" class="angebot-checkbox-label">
+                        <div class="angebot-icon">⚙️</div>
+                        <div class="angebot-content">
+                            <div class="angebot-name">MCP Server, Agenten & Skills</div>
+                            <div class="angebot-desc">Model Context Protocol</div>
+                        </div>
+                    </label>
+                </div>
+                
+                <!-- Angebot 5 -->
+                <div class="angebot-checkbox-wrapper">
+                    <input type="checkbox" id="angebot5" name="angebote[]" value="KI Schulungen" class="angebot-checkbox-input">
+                    <label for="angebot5" class="angebot-checkbox-label">
+                        <div class="angebot-icon">🎓</div>
+                        <div class="angebot-content">
+                            <div class="angebot-name">KI Schulungen</div>
+                            <div class="angebot-desc">Praxisnahe KI-Trainings</div>
+                        </div>
+                    </label>
+                </div>
+                
+                <!-- Angebot 6 -->
+                <div class="angebot-checkbox-wrapper">
+                    <input type="checkbox" id="angebot6" name="angebote[]" value="KI Sicherheitslösungen" class="angebot-checkbox-input">
+                    <label for="angebot6" class="angebot-checkbox-label">
+                        <div class="angebot-icon">🛡️</div>
+                        <div class="angebot-content">
+                            <div class="angebot-name">KI Sicherheitslösungen</div>
+                            <div class="angebot-desc">Sichere KI-Systeme</div>
+                        </div>
+                    </label>
+                </div>
+                
+                <!-- Angebot 7 -->
+                <div class="angebot-checkbox-wrapper">
+                    <input type="checkbox" id="angebot7" name="angebote[]" value="Individuelle Beratung" class="angebot-checkbox-input">
+                    <label for="angebot7" class="angebot-checkbox-label">
+                        <div class="angebot-icon">💡</div>
+                        <div class="angebot-content">
+                            <div class="angebot-name">Individuelle Beratung</div>
+                            <div class="angebot-desc">Maßgeschneiderte Lösungen</div>
+                        </div>
+                    </label>
+                </div>
+                
+                <!-- Angebot 8 -->
+                <div class="angebot-checkbox-wrapper">
+                    <input type="checkbox" id="angebot8" name="angebote[]" value="NIS2 Implementierung" class="angebot-checkbox-input">
+                    <label for="angebot8" class="angebot-checkbox-label">
+                        <div class="angebot-icon">🔐</div>
+                        <div class="angebot-content">
+                            <div class="angebot-name">NIS2 Implementierung</div>
+                            <div class="angebot-desc">NIS2-Compliance umsetzen</div>
+                        </div>
+                    </label>
+                </div>
+                
+                <!-- Angebot 9 -->
+                <div class="angebot-checkbox-wrapper">
+                    <input type="checkbox" id="angebot9" name="angebote[]" value="NIS2 Schulungen" class="angebot-checkbox-input">
+                    <label for="angebot9" class="angebot-checkbox-label">
+                        <div class="angebot-icon">📚</div>
+                        <div class="angebot-content">
+                            <div class="angebot-name">NIS2 Schulungen</div>
+                            <div class="angebot-desc">NIS2-Training für Teams</div>
+                        </div>
+                    </label>
+                </div>
+                
+                <!-- Angebot 10 -->
+                <div class="angebot-checkbox-wrapper">
+                    <input type="checkbox" id="angebot10" name="angebote[]" value="Bitte um Rückruf" class="angebot-checkbox-input">
+                    <label for="angebot10" class="angebot-checkbox-label">
+                        <div class="angebot-icon">📞</div>
+                        <div class="angebot-content">
+                            <div class="angebot-name">Bitte um Rückruf</div>
+                            <div class="angebot-desc">Wir rufen Sie zurück</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Kommentarfeld -->
+        <div class="form-section">
+            <h2 class="section-title">3. Ihre Nachricht</h2>
+            
+            <div class="form-group">
+                <label class="form-label" for="nachricht">Beschreiben Sie Ihre Anforderungen</label>
+                <textarea id="nachricht" name="nachricht" class="form-textarea" 
+                    placeholder="Teilen Sie uns Details zu Ihrem Projekt mit, z.B. Zeitrahmen, Budget, spezifische Anforderungen..."></textarea>
+            </div>
+        </div>
+        
+        <!-- Datenschutz -->
+        <div class="datenschutz-wrapper">
+            <div class="datenschutz-checkbox">
+                <input type="checkbox" id="datenschutz" name="datenschutz" required>
+                <label for="datenschutz" class="datenschutz-text">
+                    Ich habe die <a href="/datenschutz" target="_blank">Datenschutzerklärung</a> 
+                    zur Kenntnis genommen. Ich stimme zu, dass meine Angaben zur Kontaktaufnahme 
+                    und für Rückfragen dauerhaft gespeichert werden. *
+                </label>
+            </div>
+        </div>
+        
+        <!-- Honeypot (Spam-Schutz) -->
+        <input type="text" name="website" style="display:none;">
+        
+        <!-- Submit Button -->
+        <button type="submit" class="form-submit">
+            ✉ SEND
+        </button>
+    </form>
+</div>
+
+<script>
+document.getElementById('angebotsForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Validierung: Mindestens ein Angebot muss ausgewählt sein
+    const checkboxes = document.querySelectorAll('input[name="angebote[]"]:checked');
+    if (checkboxes.length === 0) {
+        document.getElementById('errorMessage').textContent = 
+            'Bitte wählen Sie mindestens ein Angebot aus.';
+        document.getElementById('formError').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+    }
+    
+    // Formular per AJAX senden
+    const formData = new FormData(this);
+    
+    fetch(this.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('formSuccess').style.display = 'block';
+            document.getElementById('formError').style.display = 'none';
+            this.reset();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            document.getElementById('errorMessage').textContent = 
+                data.message || 'Es ist ein Fehler aufgetreten.';
+            document.getElementById('formError').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    })
+    .catch(error => {
+        document.getElementById('errorMessage').textContent = 
+            'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.';
+        document.getElementById('formError').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+});
+</script>
